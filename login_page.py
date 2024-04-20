@@ -64,6 +64,7 @@ def authenticated_menu():
         if st.session_state["role"] == "admin":
             st.sidebar.page_link("pages/coach.py", label="Coach")
             st.sidebar.page_link("pages/equipment.py", label="Equipment")
+            st.sidebar.page_link("pages/Admin.py", label="Admin Dashboard")
     st.sidebar.write("## Account")
     st.sidebar.write("Logged in as: {}".format(st.session_state.get("username")))
     if st.session_state["role"] not in ["staff", "admin"]:

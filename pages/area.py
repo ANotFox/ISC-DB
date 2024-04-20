@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 
-from funclib import connect_to_database, create_db_cursor
+from funclib import connect_to_database, create_db_cursor, access_loggedout
+from login_page import menu
 
 # Function to insert data into the slot table
 def insert_area_data(mycursor, a_id, a_name):
@@ -32,10 +33,13 @@ def fetch_areas(mycursor):
 
 # Main function
 def main():
+    # authenticate()
     # Connect to the database
     mydb = connect_to_database()
     # Create a database cursor
     maincursor = create_db_cursor(mydb)
+    menu()
+    access_loggedout()
 
     # Display the form to add a new slot
     st.write("## Add Area ")

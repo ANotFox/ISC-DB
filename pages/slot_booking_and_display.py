@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 
-from funclib import connect_to_database, create_db_cursor, time_input_to_datetime
+from funclib import connect_to_database, create_db_cursor, time_input_to_datetime, access_loggedout
+from login_page import menu
 
 # Function to insert data into the slot table
 def insert_slot_data(mycursor, a_id, booked_by, start_time, end_time):
@@ -18,10 +19,13 @@ def fetch_slots(mycursor):
 
 # Main function
 def main():
+    # authenticate()
     # Connect to the database
     mydb = connect_to_database()
     # Create a database cursor
     maincursor = create_db_cursor(mydb)
+    menu()
+    access_loggedout()
     #maincursor.execute("DROP TABLE IF EXISTS area")
 
     ## Post initialisation 

@@ -12,17 +12,6 @@ connection = mysql.connector.connect(
 cursor = connection.cursor()
 kickstart(cursor, connection)
 
-def create_user_table():
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(50) NOT NULL UNIQUE,
-            password_hash VARCHAR(64) NOT NULL,
-            role ENUM('student', 'staff', 'admin') NOT NULL DEFAULT 'student'
-        )
-    """)
-    connection.commit()
-
 def register():
     st.title("Register Page")
     new_username = st.text_input("New Username")
@@ -35,7 +24,7 @@ def register():
             cursor.execute("INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s)", (new_username, password_hash, role))
             connection.commit()
             st.success("Registration successful!")
-            st.experimental_set_query_params(page="login")  # Redirect to login page
+            # st.experimental_set_query_params(page="login")  # Redirect to login page
         except mysql.connector.IntegrityError:
             st.error("Username already exists")
 
@@ -53,7 +42,7 @@ def login():
             st.session_state["role"] = user[3]  # Store user's role in session state
             st.session_state["username"] = username  # Store username in session state
             st.success("Logged in as {}".format(username))
-            st.experimental_set_query_params(page="main")
+            # st.experimental_set_query_params(page="main")
         else:
             st.error("Invalid username or password")
 
@@ -81,7 +70,7 @@ def authenticated_menu():
 
 def unauthenticated_menu():
     # Show a navigation menu for unauthenticated users
-    st.sidebar.page_link("login_page.py", label="Log in")
+    st.sidebar.page_link("login_page.py", label="Log in here")
 
 def menu():
     # Determine if a user is logged in or not, then show the correct navigation menu
@@ -97,24 +86,37 @@ def main():
     st.write("Hello, {}".format(st.session_state.get("username")))
 
 def app():
-    create_user_table()
     menu()  # Call the menu function to set up the navigation sidebar
-    page = st.experimental_get_query_params().get("page", ["login"])[0]
+    # page = st.experimental_get_query_params().get("page", ["login"])[0]
 
-    if page == "login":
-        login()
-        st.write("---")  # Add a horizontal line to separate the buttons from the content
-        if st.button("Register", key="register_btn"):
-            st.experimental_set_query_params(page="register")
-    elif page == "main":
+    # Check if the user is logged in
+    if "logged_in" not in st.session_state:
+        st.session_state["logged_in"] = False
+
+    # Display the appropriate tabs based on login status
+    if st.session_state["logged_in"]:
         main()
-    elif page == "register":
-        register()
-        st.write("")  # Add empty space for spacing between buttons
-        if st.button("Login", key="login_btn"):
-            st.experimental_set_query_params(page="login")
-    elif page == "logout":
-        logout()
+    else:
+        tab1, tab2 = st.tabs(["Register", "Login"])
+        with tab1:
+            register()
+        with tab2:
+            login()
+
+    # if page == "login":
+        # login()
+        # st.write("---")  # Add a horizontal line to separate the buttons from the content
+        # if st.button("Register", key="register_btn"):
+            # st.experimental_set_query_params(page="register")
+    # elif page == "main":
+        # main()
+    # elif page == "register":
+        # register()
+        # st.write("")  # Add empty space for spacing between buttons
+        # if st.button("Login", key="login_btn"):
+            # st.experimental_set_query_params(page="login")
+    # elif page == "logout":
+        # logout()
 
 if __name__ == "__main__":
     app()

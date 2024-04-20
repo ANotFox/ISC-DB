@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 from funclib import connect_to_database, create_db_cursor, access_loggedout
 from login_page import menu
+from streamlit_extras.row import row
 
 def insert_student_data(roll_num, firstname, lastname, dept, year, email_id):
     query = "INSERT INTO student (roll_num, firstname, lastname, dept, year, email_id) VALUES (%s, %s, %s, %s, %s, %s)"
@@ -63,6 +64,25 @@ def student_info_form():
                 st.warning("Student with given roll number not found.")
         
 
+        # # Display student details
+        #         st.markdown("**Student Details:**")
+        #         st.markdown("")
+        
+        #         # Define CSS styles for different text properties
+        #         style_bold_red = "font-weight:bold; color:red;"
+        #         style_regular_black = "color:black;"
+        
+        #         # Display student details using markdown
+        #         st.markdown(f"<span style='{style_bold_red}'>Roll Number:</span> <span style='{style_regular_black}'>{rollnumber}</span>", unsafe_allow_html=True)
+        #         st.markdown(f"<span style='{style_bold_red}'>First Name:</span> <span style='{style_regular_black}'>{firstname}</span>", unsafe_allow_html=True)
+        #         st.markdown(f"<span style='{style_bold_red}'>Last Name:</span> <span style='{style_regular_black}'>{lastname}</span>", unsafe_allow_html=True)
+        #         st.markdown(f"<span style='{style_bold_red}'>Department:</span> <span style='{style_regular_black}'>{dept}</span>", unsafe_allow_html=True)
+        #         st.markdown(f"<span style='{style_bold_red}'>Year of Enrollment:</span> <span style='{style_regular_black}'>{year.strftime('%Y-%m-%d')}</span>", unsafe_allow_html=True)
+        #         st.markdown(f"<span style='{style_bold_red}'>Email Address:</span> <span style='{style_regular_black}'>{email_id}</span>", unsafe_allow_html=True)
+        #     else:
+        #         st.warning("Student with given roll number not found.")
+        
+
     if not details:
         with st.form(key='add_student_details'):
             st.write("Edit Details")
@@ -92,3 +112,4 @@ if __name__ == "__main__":
     menu()
     access_loggedout()
     student_info_form()
+

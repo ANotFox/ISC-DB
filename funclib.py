@@ -79,5 +79,14 @@ def kickstart(mycursor, connection):
             FOREIGN KEY (a_id) REFERENCES area(a_id)
         )
     """)
+
+    mycursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(50) NOT NULL UNIQUE,
+            password_hash VARCHAR(64) NOT NULL,
+            role ENUM('student', 'staff', 'admin') NOT NULL DEFAULT 'student'
+        )
+    """)
     connection.commit()
 

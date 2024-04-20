@@ -24,26 +24,44 @@ def student_info_form():
     st.title("Student Information Form")
 
     with st.form(key='edit_student_details'):
-        st.write("Edit Details")
-        rollnumber = st.number_input("Enter Roll Number", step=1, min_value=0)
+        st.write("Student Details")
+        # rollnumber = st.number_input("Enter Roll Number", step=1, min_value=0)
+        # details = fetch_student_details(rollnumber)
+        username = st.session_state.get("username")
+        submit_button = st.form_submit_button("Fetch Your Details")
+        rollnumber = int(username)
         details = fetch_student_details(rollnumber)
-        submit_button = st.form_submit_button("Submit Roll Number")
+        
 
         if submit_button:
             details = fetch_student_details(rollnumber)
             if details:
                 firstname, lastname, dept, year, email_id = details
-
+        
                 # Display student details
                 st.write("**Student Details:**")
-                st.write(f"**Roll Number:** {rollnumber}")
-                st.write(f"**First Name:** {firstname}")
-                st.write(f"**Last Name:** {lastname}")
-                st.write(f"**Department:** {dept}")
-                st.write(f"**Year of Enrollment:** {year.strftime('%Y-%m-%d')}")
-                st.write(f"**Email Address:** {email_id}")
+                st.write("")
+        
+                # Display student details using columns
+                col1, col2 = st.columns([1, 3])
+                with col1:
+                    st.write("**Roll Number:**")
+                    st.write("**First Name:**")
+                    st.write("**Last Name:**")
+                    st.write("**Department:**")
+                    st.write("**Year of Enrollment:**")
+                    st.write("**Email Address:**")
+        
+                with col2:
+                    st.write(f": {rollnumber}")
+                    st.write(f": {firstname}")
+                    st.write(f": {lastname}")
+                    st.write(f": {dept}")
+                    st.write(f": {year.strftime('%Y-%m-%d')}")
+                    st.write(f": {email_id}")
             else:
                 st.warning("Student with given roll number not found.")
+        
 
     if not details:
         with st.form(key='add_student_details'):

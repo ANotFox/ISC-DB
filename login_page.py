@@ -57,6 +57,7 @@ def authenticated_menu():
     st.sidebar.write("## Navigation")
     st.sidebar.page_link("pages/slot_booking_and_display.py", label="Slot Booking and Display")
     st.sidebar.page_link("pages/training.py", label="Training")
+    st.sidebar.page_link("pages/Slots.py", label="Slot New")
     
     if st.session_state["role"] in ["staff", "admin"]:
         st.sidebar.page_link("pages/area.py", label="Areas")

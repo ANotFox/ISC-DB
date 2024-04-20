@@ -50,12 +50,13 @@ def logout():
     st.session_state.pop("logged_in", None)
     st.session_state.pop("role", None)
     st.session_state.pop("username", None)
-    st.experimental_set_query_params(page="login")
+    st.query_params(page="login")
 
 def authenticated_menu():
     # Show a navigation menu for authenticated users based on their role
     st.sidebar.write("## Navigation")
     st.sidebar.page_link("pages/slot_booking_and_display.py", label="Slot Booking and Display")
+    st.sidebar.page_link("pages/training.py", label="Training")
     
     if st.session_state["role"] in ["staff", "admin"]:
         st.sidebar.page_link("pages/area.py", label="Areas")

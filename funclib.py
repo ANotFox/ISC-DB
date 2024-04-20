@@ -88,5 +88,27 @@ def kickstart(mycursor, connection):
             role ENUM('student', 'staff', 'admin') NOT NULL DEFAULT 'student'
         )
     """)
+
+        # Create coach table
+    mycursor.execute("""
+        CREATE TABLE IF NOT EXISTS coach (
+            coach_id INT PRIMARY KEY,
+            name VARCHAR(255),
+            sport_taught VARCHAR(255),
+            experience INT,
+            salary DECIMAL(10, 2)
+        )
+    """)
+
+    # Create coach_trains table
+    mycursor.execute("""
+        CREATE TABLE IF NOT EXISTS coach_trains (
+            coach_id INT,
+            student_id INT,
+            FOREIGN KEY (coach_id) REFERENCES coach(coach_id),
+            FOREIGN KEY (student_id) REFERENCES student(roll_num)
+        )
+    """)
+
     connection.commit()
 

@@ -34,9 +34,8 @@ def fetch_areas(mycursor):
 # Main function
 def main():
     # authenticate()
-    # Connect to the database
+
     mydb = connect_to_database()
-    # Create a database cursor
     maincursor = create_db_cursor(mydb)
     menu()
     access_loggedout()
@@ -68,10 +67,8 @@ def main():
     else:
         st.write("No areas found.")
 
-    # Display the dropdown menu to select an area
     selected_area = st.selectbox("Select an area:", [f"{a_id}: {a_name}" for a_id, a_name in areas])
 
-    # Perform actions based on user selection
     if selected_area:
         a_id = int(selected_area.split(":")[0])
         action = st.selectbox("Select action:", ["Update Name", "Delete"])
@@ -87,7 +84,6 @@ def main():
                 delete_area(maincursor, a_id)
                 mydb.commit()
 
-    # Close the database cursor and connection
     maincursor.close()
     mydb.close()
 

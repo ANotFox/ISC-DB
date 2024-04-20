@@ -41,7 +41,7 @@ def access_loggedout():
         st.stop()
 
 
-def kickstart(mycursor):
+def kickstart(mycursor, connection):
     mycursor.execute("CREATE DATABASE IF NOT EXISTS projectDB2")
 
     # Switch to the projectDB database
@@ -74,7 +74,10 @@ def kickstart(mycursor):
             booked_by INT NOT NULL,
             start_time DATETIME NOT NULL,
             end_time DATETIME NOT NULL,
-            PRIMARY KEY (a_id, booked_by)
+            PRIMARY KEY (a_id, booked_by),
+            FOREIGN KEY (booked_by) REFERENCES student(roll_num),
+            FOREIGN KEY (a_id) REFERENCES area(a_id)
         )
     """)
+    connection.commit()
 

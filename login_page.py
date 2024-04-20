@@ -7,11 +7,10 @@ connection = mysql.connector.connect(
     host="localhost",
     user="root",
     password="mySQL_DevX@123",
-    database="projectDB2"
 )
 
 cursor = connection.cursor()
-kickstart(cursor)
+kickstart(cursor, connection)
 
 def create_user_table():
     cursor.execute("""

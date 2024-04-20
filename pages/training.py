@@ -108,7 +108,7 @@ def main():
 
     if display_coaches_button:
         # Get student ID from session state
-        student_id = int(st.session_state["current_roll_number"])
+        student_id = int(st.session_state["username"])
 
         # Call stored procedure to display coaches
         coaches = display_student_coaches(student_id)

@@ -23,7 +23,7 @@ def main():
         coach_id = st.number_input('Coach ID', step=1, min_value=0)
         name = st.text_input('Name')
         sport_taught = st.text_input('Sport Taught')
-        experience = st.number_input('Experience', step=0.5, min_value=0)
+        experience = st.number_input('Experience', step=1, min_value=0)
         salary = st.number_input('Salary', step=0.01, min_value=0.00)
         submit_button = st.form_submit_button(label='Submit')
 

@@ -67,6 +67,7 @@ def authenticated_menu():
     # Show a navigation menu for authenticated users based on their role
     st.sidebar.write("## Navigation")
     st.sidebar.page_link("pages/slot_booking_and_display.py", label="Slot Booking and Display")
+    
     if st.session_state["role"] in ["staff", "admin"]:
         st.sidebar.page_link("pages/area.py", label="Areas")
         if st.session_state["role"] == "admin":
@@ -74,6 +75,8 @@ def authenticated_menu():
             st.sidebar.page_link("pages/equipment.py", label="Equipment")
     st.sidebar.write("## Account")
     st.sidebar.write("Logged in as: {}".format(st.session_state.get("username")))
+    if st.session_state["role"] not in ["staff", "admin"]:
+        st.sidebar.page_link("pages/student.py", label="Student Profile")
     st.sidebar.button("Logout", on_click=logout)
 
 def unauthenticated_menu():

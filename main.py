@@ -9,18 +9,6 @@ mydb = mysql.connector.connect(
     password="mySQL_DevX@123",
 )
 
-if "logged_in" not in st.session_state:
-    st.experimental_set_query_params(logged_in=False)
-
-if st.session_state.logged_in:
-    st.title("Welcome to the Main Page")
-    st.write("You are logged in!")
-else:
-    st.write("Please log in to access the main page.")
-    login_button = st.button("Go to Login Page")
-    if login_button:
-        st.experimental_set_query_params(logged_in=False)
-            
 # Function to insert data into the student table
 def insert_student_data(firstname, lastname, rollnumber, dept, year, email_id):
     mycursor = mydb.cursor()
@@ -31,10 +19,10 @@ def insert_student_data(firstname, lastname, rollnumber, dept, year, email_id):
     mycursor.close()
 
 
-def insert_area_data(area_id, name):
+def insert_area_data(area_id, a_name):
     mycursor = mydb.cursor()
-    query = "INSERT INTO area(a_id, name) values (%s, %s)"
-    val = (area_id, name)
+    query = "INSERT INTO area(a_id, a_name) values (%s, %s)"
+    val = (area_id, a_name)
     mycursor.execute(query, val)
     mydb.commit()
     mycursor.close()
@@ -66,10 +54,11 @@ for db in mycursor:
     print(db[0])
 
 # Create the projectDB database if it doesn't exist
-mycursor.execute("CREATE DATABASE IF NOT EXISTS projectDB")
+mycursor.execute("CREATE DATABASE IF NOT EXISTS projectDB2")
 
 # Switch to the projectDB database
-mycursor.execute("USE projectDB")
+mycursor.execute("USE projectDB2")
+#mycursor.execute("DROP database IF EXISTS projectdb")
 
 # Create the student table
 mycursor.execute("""
@@ -87,9 +76,7 @@ mycursor.execute("""
 mycursor.execute("""
     CREATE TABLE IF NOT EXISTS area (
         a_id INT PRIMARY KEY NOT NULL,
-        name VARCHAR(50) NOT NULL,
-        roll_no INT NULL,
-        FOREIGN KEY (roll_no) REFERENCES student(roll_num)
+        a_name VARCHAR(50) NOT NULL
     )
 """)
 
@@ -99,13 +86,10 @@ mycursor.execute("""
         booked_by INT NOT NULL,
         start_time DATETIME NOT NULL,
         end_time DATETIME NOT NULL,
-        PRIMARY KEY (a_id, booked_by),
+        PRIMARY KEY (a_id, booked_by)
     )
 """)
 
-      #  FOREIGN KEY (a_id) REFERENCES area(a_id),
-      #  FOREIGN KEY (booked_by) REFERENCES student(roll_num)
-      
 # Streamlit form to accept user inputs
 st.title("Student Information Form")
 
@@ -129,18 +113,19 @@ if st.button("Submit"):
 data = np.genfromtxt('Area_Data.txt', dtype=str)
 
 # Iterate over the data and insert into the area table
-for row in data:
-    area_id, name = int(row[0]), ' '.join(row[1:])
-    # Check if area_id already exists in the database
-    mycursor = mydb.cursor()
-    mycursor.execute("SELECT * FROM area WHERE a_id = %s", (area_id,))
-    result = mycursor.fetchone()
-    mycursor.close()
-    # If area_id does not exist, insert into the database
-    if not result:
-        insert_area_data(area_id, name.strip())
-    else:
-        print(f"Skipping duplicate entry for area_id {area_id}")
+#for row in data:
+#    area_id, a_name = int(row[0]), ' '.join(row[1:])
+#    # Check if area_id already exists in the database
+#    mycursor = mydb.cursor()
+#    mycursor.execute("SELECT * FROM area WHERE a_id = %s", (area_id,))
+#    result = mycursor.fetchone()
+#    mycursor.close()
+#    # If area_id does not exist, insert into the database
+#    if not result:
+#        print("mewo")
+#        #insert_area_data(area_id, a_name.strip())
+#    else:
+#        print(f"Skipping duplicate entry for area_id {area_id}")
 
 
 # # Read data from text file and insert into the slot table
@@ -153,7 +138,6 @@ for row in data:
 #         insert_slot_data(area_id, start_time, end_time)
 
 place = st.text_input("Enter ISC Place to view slot timings.")
-
 
 
 # Commit the changes and close the cursor and connection

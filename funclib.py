@@ -119,5 +119,23 @@ def kickstart(mycursor, connection):
         )
     """)
 
+    mycursor.execute("""
+        CREATE TABLE IF NOT EXISTS equipment (
+            e_id INT PRIMARY KEY NOT NULL,
+            e_type VARCHAR(50),
+            count INT
+        )  
+    """)
+
+    mycursor.execute("""
+        CREATE TABLE IF NOT EXISTS equipment_bookings (
+            s_id INT NOT NULL,
+            e_id INT,
+            PRIMARY KEY (s_id, e_id),
+            FOREIGN KEY (s_id) REFERENCES student(roll_num),
+            FOREIGN KEY (e_id) REFERENCES equipment(e_id)
+        )
+    """)
+
     connection.commit()
 

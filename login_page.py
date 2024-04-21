@@ -59,7 +59,8 @@ def authenticated_menu():
     if st.session_state["role"] not in ["staff", "admin"]:
         st.sidebar.page_link("pages/slot_booking_and_display.py", label="Slot Booking and Display")
         st.sidebar.page_link("pages/training.py", label="Training")
-        st.sidebar.page_link("pages/Slots.py", label="Slot New")
+        # st.sidebar.page_link("pages/Slots.py", label="Slot New")
+        st.sidebar.page_link("pages/newslot.py", label="New Slot")
     
     if st.session_state["role"] in ["staff", "admin"]:
         st.sidebar.page_link("pages/area.py", label="Areas")
@@ -86,7 +87,7 @@ def menu():
 
 def main():
     st.title("Main Page")
-    st.write("Welcome to the main page!")
+    st.write("Welcome to IMAGE: ISC Management And General Enquiry system!")
     # Add your main page content here
     st.write("Hello, {}".format(st.session_state.get("username")))
 

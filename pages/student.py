@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import datetime
-from funclib import connect_to_database, create_db_cursor, access_loggedout
+from funclib import connect_to_database, create_db_cursor, access_loggedout, is_user_banned
 from login_page import menu
 from streamlit_extras.row import row
 
@@ -29,6 +29,7 @@ def student_info_form():
     username = st.session_state.get("username")
     rollnumber = int(username)
     details = fetch_student_details(rollnumber)
+    
     # Expander for fetching student details
     with st.expander("Fetch Your Details"):
         # Fetch student details from the database
@@ -103,8 +104,8 @@ def student_info_form():
 
     if not details:
         with st.form(key='add_student_details'):
-            st.write("Edit Details")
-            rollnumber = st.number_input("Enter Roll Number", step=1, min_value=0)
+            st.write("Initialise Details")
+            # rollnumber = st.number_input("Enter Roll Number", step=1, min_value=0)
 
             # Form to add student details
             firstname_input = st.text_input("First Name")
@@ -121,6 +122,7 @@ def student_info_form():
                     # Insert student details into the database
                     insert_student_data(rollnumber, firstname_input.strip(), lastname_input.strip(), dept_input.strip(), year_input, email_input.strip())
                     st.success("Student information added successfully.")
+                    st.experimental_rerun()
                 else:
                     st.error("Please fill in all the required fields.")
 
@@ -130,5 +132,9 @@ if __name__ == "__main__":
     maincursor = create_db_cursor(connection)
     menu()
     access_loggedout()
+    username = st.session_state.get("username", "")
+    is_banned = is_user_banned(maincursor, username)
+    if is_banned:
+        st.sidebar.error("You are currently banned.")
     student_info_form()
 

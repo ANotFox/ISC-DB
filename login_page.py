@@ -50,21 +50,23 @@ def logout():
     st.session_state.pop("logged_in", None)
     st.session_state.pop("role", None)
     st.session_state.pop("username", None)
-    st.query_params(page="login")
+    # st.query_params(page="login")
+    st.session_state["page"] = "login"
 
 def authenticated_menu():
     # Show a navigation menu for authenticated users based on their role
     st.sidebar.write("## Navigation")
-    st.sidebar.page_link("pages/slot_booking_and_display.py", label="Slot Booking and Display")
-    st.sidebar.page_link("pages/training.py", label="Training")
-    st.sidebar.page_link("pages/Slots.py", label="Slot New")
+    if st.session_state["role"] not in ["staff", "admin"]:
+        st.sidebar.page_link("pages/slot_booking_and_display.py", label="Slot Booking and Display")
+        st.sidebar.page_link("pages/training.py", label="Training")
+        st.sidebar.page_link("pages/Slots.py", label="Slot New")
     
     if st.session_state["role"] in ["staff", "admin"]:
         st.sidebar.page_link("pages/area.py", label="Areas")
         if st.session_state["role"] == "admin":
             st.sidebar.page_link("pages/coach.py", label="Coach")
             st.sidebar.page_link("pages/equipment.py", label="Equipment")
-            st.sidebar.page_link("pages/Admin.py", label="Admin Dashboard")
+            st.sidebar.page_link("pages/admin.py", label="Admin Dashboard")
     st.sidebar.write("## Account")
     st.sidebar.write("Logged in as: {}".format(st.session_state.get("username")))
     if st.session_state["role"] not in ["staff", "admin"]:
@@ -100,11 +102,11 @@ def app():
     if st.session_state["logged_in"]:
         main()
     else:
-        tab1, tab2 = st.tabs(["Register", "Login"])
+        tab1, tab2 = st.tabs(["Login", "Register"])
         with tab1:
-            register()
-        with tab2:
             login()
+        with tab2:
+            register()
 
     # if page == "login":
         # login()

@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 from datetime import datetime
-from funclib import connect_to_database, create_db_cursor, time_input_to_datetime, access_loggedout
+from funclib import connect_to_database, create_db_cursor, access_loggedout, is_user_banned
 from login_page import menu
 
 # Function to insert data into the slot table
@@ -35,7 +35,11 @@ def main():
     menu()
     access_loggedout()
     #maincursor.execute("DROP TABLE IF EXISTS area")
-
+    username = int(st.session_state.get("username"))
+    if is_user_banned(maincursor, username):
+        st.error("You are banned from the system. You cannot book slots.")
+        st.stop()
+    
     ## Post initialisation 
     # Display the form to add a new slot
     st.write("## Add Slot Booking")

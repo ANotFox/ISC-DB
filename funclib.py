@@ -40,6 +40,14 @@ def access_loggedout():
         st.warning("You do not have permission to view this page.")
         st.stop()
 
+def is_user_banned(mycursor, username):
+    query = "SELECT is_banned_unavailable FROM users WHERE username = %s"
+    mycursor.execute(query, (username,))
+    result = mycursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        return False
 
 def kickstart(mycursor, connection):
     mycursor.execute("CREATE DATABASE IF NOT EXISTS projectDB2")
@@ -81,11 +89,12 @@ def kickstart(mycursor, connection):
     """)
 
     mycursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(50) NOT NULL UNIQUE,
-            password_hash VARCHAR(64) NOT NULL,
-            role ENUM('student', 'staff', 'admin') NOT NULL DEFAULT 'student'
+    CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) NOT NULL UNIQUE,
+        password_hash VARCHAR(64) NOT NULL,
+        role ENUM('student', 'staff', 'admin') NOT NULL DEFAULT 'student',
+        is_banned_unavailable BOOLEAN NOT NULL DEFAULT False
         )
     """)
 
